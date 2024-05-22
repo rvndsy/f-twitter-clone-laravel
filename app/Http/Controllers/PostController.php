@@ -10,6 +10,8 @@ use Illuminate\View\View;
 
 use Illuminate\Http\RedirectResponse;
 
+use Illuminate\Support\Facades\Gate;
+
 class PostController extends Controller
 {
     /**
@@ -69,8 +71,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Post $post):RedirectResponse
     {
-        //
+        //check for authorization -> delete post -> redirect back/refresh
+        Gate::authorize('delete', $post);
+        $post->delete();
+
+        return redirect(route('posts.index'));
     }
 }
