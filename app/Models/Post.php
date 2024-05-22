@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    
+    // enable Laravel mass-assignment for message attribute
+    protected $fillable = ['message'];
 }

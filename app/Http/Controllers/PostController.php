@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+use Illuminate\Http\RedirectResponse;
+
 class PostController extends Controller
 {
     /**
@@ -29,9 +31,13 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request):RedirectResponse
     {
-        //
+        $request->user()->posts()->create($request->validate([
+            'message' => 'required|string|max:255'
+        ]));
+
+        return redirect(route('posts.index'));
     }
 
     /**
