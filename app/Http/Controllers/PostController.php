@@ -17,7 +17,7 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index():View
+    public function index()
     {
         return view('posts.index', [
             'posts' => Post::with('user')->latest()->get()
@@ -35,7 +35,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request):RedirectResponse
+    public function store(Request $request)
     {
         $request->user()->posts()->create($request->validate([
             'message' => 'required|string|max:255'
@@ -57,7 +57,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        Gate::authorize('update', $post);
+
+        return view('posts.edit', [
+            'post' => $post
+        ]);
     }
 
     /**
@@ -65,13 +69,19 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        Gate::authorize('update', $post);
+
+        $post->update($request->validate([
+            'message' => 'required|string|max:255'
+        ]));
+
+        return redirect(route('posts.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post):RedirectResponse
+    public function destroy(Post $post)
     {
         //check for authorization -> delete post -> redirect back/refresh
         Gate::authorize('delete', $post);

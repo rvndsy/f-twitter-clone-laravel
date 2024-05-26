@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 
 Route::resource('posts', PostController::class)
-    ->only(['index', 'store', 'destroy'])
+    ->only(['index', 'store', 'destroy', 'edit', 'update'])
     ->middleware(['auth', 'verified']);
 
 Route::get('/', function () {
