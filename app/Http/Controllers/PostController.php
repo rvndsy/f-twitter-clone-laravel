@@ -38,8 +38,16 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->user()->posts()->create($request->validate([
-            'message' => 'required|string|max:255'
+            'message' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]));
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+            $validatedData['image_path'] = $path;
+        }
+
+        $request->user()->posts()->create($validatedData);
 
         return redirect(route('posts.index'));
     }
@@ -72,7 +80,8 @@ class PostController extends Controller
         Gate::authorize('update', $post);
 
         $post->update($request->validate([
-            'message' => 'required|string|max:255'
+            'message' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096'
         ]));
 
         return redirect(route('posts.index'));
