@@ -55,9 +55,6 @@
                                         @method('delete')
                                         {{ __('Delete') }}
                                     </x-dropdown-link>
-                                    <x-modal name="Modal name">
-                                        {{ __('Delete') }}
-                                    </x-modal>
                                 </form>
                                 <x-dropdown-link :href="route('posts.edit', $post)">
                                     {{ __('Edit') }}
