@@ -3,9 +3,15 @@
 
         <!-- Post form is rendered here: -->
 
-        <form method="POST" action="{{ route('posts.store') }}">
+        <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
             @csrf <!-- Cross-site request forgery protection (mandatory) -->
-            <textarea name="message" placeholder="{{ __('Type your post here...') }}" class="block w-full border-gray-400 h-40">{{ old('message') }}</textarea>
+            <textarea name="message" placeholder="{{ __('Type your post here...') }}" class="block w-full border-gray-400 h-35"></textarea>
+                @error('message')<small class="text-red-500">{{ $message }}</small>@enderror
+            <div class="">
+                <label for="image" class="block text-sm font-medium my-4">{{ __('Upload image here') }}</label>
+                <input type="file" name="image" id="image" class="border-gray-400">
+                @error('image')<small class="text-red-500">{{ $message }}</small>@enderror
+            </div>
             <x-input-error :messages="$errors->get('message')" class="mt-1" />
             <x-primary-button class="mt-4">{{ __('Post') }}</x-primary-button>
         </form>
