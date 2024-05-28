@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -47,15 +48,16 @@ class PostController extends Controller
 
         // dd($request);
 
+        // Store the image file in public storage in /post-images
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->storeAs(
-                'post-images',
-                 Auth::id() . '-' . floor(microtime(true) * 1000) . '.' . $request->file('image')->getClientOriginalExtension(),
-                'public'
-            );
+
+            $filename = Auth::id() . '-' . floor(microtime(true) * 1000) . '.' . $request->file('image')->getClientOriginalExtension();
+
+            $imagePath = Storage::disk('public')->putFileAs('post-images', $request->file('image'), $filename);
         }
 
+        // Store the post text and image file path in DB
         $request->user()->posts()->create([
             'message' => $request->message,
             'image_path' => $imagePath
@@ -106,7 +108,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //check for authorization -> delete post -> redirect back/refresh
+        //check for authorization -> delete image file -> delete post data -> redirect back/refresh
+
+        if($post->image_path) {
+            Storage::disk('public')->delete($post->image_path);
+        }
+
         Gate::authorize('delete', $post);
         $post->delete();
 
