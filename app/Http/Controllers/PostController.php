@@ -40,20 +40,15 @@ class PostController extends Controller
     {
         // dd($request->file('image'));
 
-        $message = $request->validate([
+        $request->validate([
             'message' => 'required|string|max:255',
-        ]);
-
-        $image = $request->validate([
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8192'
         ]);
 
         // dd($request);
 
-        $request->user()->posts()->create($message);
-
         $imagePath = null;
-        if ($image != null) {
+        if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->storeAs(
                 'post-images',
                  Auth::id() . '-' . floor(microtime(true) * 1000) . '.' . $request->file('image')->getClientOriginalExtension(),
@@ -61,14 +56,12 @@ class PostController extends Controller
             );
         }
 
-        dd($imagePath);
+        $request->user()->posts()->create([
+            'message' => $request->message,
+            'image_path' => $imagePath
+        ]);
 
-        // if ($request->hasFile('image')) {
-        //     $path = $request->file('image')->store('images', 'public');
-        //     $validatedData['image_path'] = $path;
-        // }
-
-        // $request->user()->posts()->create($validatedData);
+        // dd($imagePath);
 
         return redirect(route('posts.index'));
     }

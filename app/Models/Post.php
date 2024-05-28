@@ -12,7 +12,10 @@ class Post extends Model
     use HasFactory;
 
     // enable Laravel mass-assignment for message attribute
-    protected $fillable = ['message'];
+    protected $fillable = [
+        'message',
+        'image_path'
+    ];
 
     // one post belongs to one user
     public function user():BelongsTo 

@@ -6,7 +6,7 @@
         <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
             @csrf <!-- Cross-site request forgery protection (mandatory) -->
             <textarea name="message" placeholder="{{ __('Type your post here...') }}" class="block w-full border-gray-400 h-35"></textarea>
-                @error('message')<small class="text-red-500">{{ $message }}</small>@enderror
+            @error('message')<small class="text-red-500">{{ $message }}</small>@enderror
             <div class="">
                 <label for="image" class="block text-sm font-medium my-4">{{ __('Upload image here') }}</label>
                 <input type="file" name="image" id="image" class="border-gray-400">
@@ -59,7 +59,19 @@
                             </x-slot>
                         </x-dropdown>
                         @endif
-                    </div class="mt-3 text-lg text-gray-900">{{ $post->message }}</p>
+
+                    </div>
+
+                    <p class="mt-3 text-sm text-gray-900">
+                        {{ $post->message }}
+                    </p>
+
+                    @if($post->image_path)
+                    <div class="mt-3">
+                        <img src="{{ asset('/storage/'. $post->image_path) }}" alt="{{ 'Image by ' . Auth::user()->name }}" />
+                    </div>
+                    @endif
+
                 </div>
             </div>
             @endforeach
