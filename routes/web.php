@@ -5,15 +5,21 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
 
+use Illuminate\Support\Facades\Auth;
+
 Route::resource('posts', PostController::class)
     ->only(['index', 'store', 'destroy', 'edit', 'update'])
     ->middleware(['auth', 'verified']);
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect('/posts');
+    } else {
+        return view('welcome');
+    }
 })->name('welcome');
 
-Route::redirect('/home', '/posts')->name('home');
+Route::redirect('/home', '/posts')->middleware(['auth', 'verified'])->name('home');
 Route::redirect('/dashboard', '/posts')->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::middleware('auth')->group(function () {
