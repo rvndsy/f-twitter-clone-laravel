@@ -1,6 +1,6 @@
 <x-guest-layout>
     <h1 class="flex justify-center mb-4 text-lg text-black font-extrabold">
-        {{ __('Welcome to "F"!') }}
+        {{ __('Join now.') }}
     </h1>
     <div class="mb-4 text-sm text-black">
         {{ __('To see or make any posts. You must be logged in!') }}

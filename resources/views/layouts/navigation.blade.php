@@ -1,17 +1,18 @@
 <nav x-data="{ open: false }" class="bg-zinc-900 border-b border-gray-100 text-white">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 text-white">
+    <div class="px-4">
+        <div class="flex justify-between text-white">
+            <!-- Site logo & navigation -->
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="flex items-center w-auto justify-center text-white">
                     <a href="{{ route('home') }}">
-                        <div class="h-9 w-auto flex items-center justify-center text-white" style="font-size: 5vw">&#x1D53D;</div>
+                        <div class="flex items-center justify-center text-white font-sans" style="font-size: 5rem">&#x1D53D;</div>
                     </a>
                 </div>
 
-                <!-- Navigation Links (Desktop users) -->
-                <div class="space-x-8 flex justify-center items-center">
+                <!-- Navigation Links -->
+                <div class="flex space-x-8 justify-center items-center mx-5">
                     <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                         {{ __('Posts') }}
                     </x-nav-link>
@@ -19,10 +20,11 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="flex items-center ms-6">
-                <x-dropdown align="right" width="48">
+            <div class="flex items-center relative">
+                <x-dropdown>
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border text-sm font-medium
+                                     text-gray-200 hover:text-gray-400 transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

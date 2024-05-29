@@ -1,33 +1,35 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto">
 
-        <!-- Post form is rendered here: -->
+        <div class="bg-zinc-900 border border-gray-100 p-4">
 
-        <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
-            @csrf <!-- Cross-site request forgery protection (mandatory) -->
-            <textarea name="message" placeholder="{{ __('Type your post here...') }}" class="block w-full border-gray-400 h-35"></textarea>
-            @error('message')<small class="text-red-500">{{ $message }}</small>@enderror
-            <div class="">
-                <label for="image" class="block text-sm font-medium my-4">{{ __('Upload image here') }}</label>
-                <input type="file" name="image" id="image" class="border-gray-400">
-            </div>
-            <x-input-error :messages="$errors->get('message')" class="mt-1" />
-            <x-primary-button class="mt-4">{{ __('Post') }}</x-primary-button>
-        </form>
+            <!-- Post form is rendered here: -->
 
-        <!-- Individual posts are rendered here: -->
+            <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
+                <h1 class="text-white mt-5">{{ __('Post something?') }}</h1>
+                @csrf <!-- Cross-site request forgery protection (mandatory) -->
+                <textarea name="message" placeholder="{{ __('Type here...') }}" class="block w-full bg-zinc-900 border-zinc-600 h-35 mt-4" style="color: white"></textarea>
+                <p class="text-sm text-gray-500 dark:text-gray-300 mb-4 mt-2">Max post length is 255 characters</p>
+                @error('message')<small class="text-red-500">{{ $message }}</small>@enderror
+                <input class="block w-full text-sm border rounded-lg cursor-pointer
+                        text-gray-400 border-zinc-600 placeholder-gray-400" type="file" name="image" id="image">
+                <p class="text-sm text-gray-500 dark:text-gray-300 mb-4 mt-2">Upload an image</p>
+                <x-primary-button class="mt-4">{{ __('Post') }}</x-primary-button>
+                @error('image')<small class="text-red-500">{{ $message }}</small>@enderror
+                <x-input-error :messages="$errors->get('message')" class="mt-1" />
+            </form>
 
-        <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
+            <!-- Individual posts are rendered here: -->
 
             @foreach ($posts as $post)
-            <div class="p-6 flex space-x-2">
+            <div class="p-6 flex border-t border-gray-100 mt-8">
 
                 <!-- Main post body -->
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <div>
-                            <span class="text-gray-800 font-bold">{{ $post->user->name }}</span>
-                            <small class="ml-5 text-gray-500">{{ __('at') }} {{ $post->created_at->format('g:i a, j M Y' ) }}</small>
+                            <span class="text-white font-bold">{{ $post->user->name }}</span>
+                            <small class="ml-5 text-gray-500">{{ __('at') }} {{ $post->created_at->format('H:i, j M Y' ) }}</small>
                             <!-- Display if the post is edited -->
                             @if (!$post->created_at->eq($post->updated_at))
                             <small class="text-sm text-gray-600"> {{ __('edited') }}</small>
@@ -52,21 +54,18 @@
                                         {{ __('Delete') }}
                                     </x-dropdown-link>
                                 </form>
-                                <x-dropdown-link :href="route('posts.edit', $post)">
-                                    {{ __('Edit') }}
-                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                         @endif
 
                     </div>
 
-                    <p class="mt-3 text-sm text-gray-900">
+                    <p class="mt-1 text-sm text-white">
                         {{ $post->message }}
                     </p>
 
                     @if($post->image_path)
-                    <div class="mt-3">
+                    <div class="mt-6">
                         <img src="{{ asset('/storage/'. $post->image_path) }}" alt="{{ 'Image by ' . Auth::user()->name }}" />
                     </div>
                     @endif
@@ -76,5 +75,6 @@
             @endforeach
 
         </div>
+
     </div>
 </x-app-layout>
